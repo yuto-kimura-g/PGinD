@@ -1,0 +1,11 @@
+global:
+  slack_api_url: "https://hooks.slack.com/services/***"
+
+route:
+  receiver: "slack-receiver"
+
+receivers:
+  - name: "slack-receiver"
+    slack_configs:
+      - channel: "#alert"
+        send_resolved: true

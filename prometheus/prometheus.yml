@@ -1,0 +1,25 @@
+global:
+  scrape_interval: 15s # scrape metrics from targets every interval seconds
+  evaluation_interval: 15s # evaluate rules every interval seconds
+  external_labels:
+    # The label has no special meaning. It is just for filtering.
+    monitor: "codelab"
+
+rule_files:
+  - "/etc/prometheus/alert.rules.yml"
+
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets: ["alertmanager:9093"]
+
+scrape_configs:
+  - job_name: "prometheus"
+    scrape_interval: 5s # override the global config
+    static_configs:
+      - targets: ["localhost:9090"]
+  - job_name: "node"
+    scrape_interval: 5s
+    static_configs:
+      # specify the compose service name as the hostname
+      - targets: ["node-exporter:9100"]

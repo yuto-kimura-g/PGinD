@@ -1,0 +1,22 @@
+groups:
+  - name: example.com
+    rules:
+      - alert: instance_down
+        # PromQL (prometheus query language)
+        expr: up == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Instance {{ $labels.instance }} down"
+          description: "{{ $labels.instance }} of job {{ $labels.job }} has been down for more than 1 minutes."
+          resolved_text: "{{ $labels.instance }} has recoverd."
+
+      - alert: cpu_busy
+        expr: 100 - (avg by (instance) (irate(node_cpu_seconds_total{job="node"}[1m])) * 100) > 80
+        for: 1m
+        labels:
+          severity: page
+        annotations:
+          summary: "CPU busy"
+          description: "CPU usage on {{ $labels.instance }} is above 80% for 1 minutes."
